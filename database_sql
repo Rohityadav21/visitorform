@@ -1,0 +1,18 @@
+CREATE DATABASE visitor_management;
+
+USE visitor_management;
+
+CREATE TABLE visitors (
+    id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    full_name VARCHAR(100) NOT NULL,
+    email VARCHAR(50),
+    phone VARCHAR(15),
+    department VARCHAR(50),
+    contact_person VARCHAR(50),
+    position VARCHAR(100),
+    id_proof VARCHAR(50),
+    id_proof_number VARCHAR(50),
+    gender VARCHAR(10),
+    image_path VARCHAR(100),
+    reg_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);

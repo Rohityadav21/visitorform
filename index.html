@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visitor Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: url('bg-image.jpg') no-repeat center center fixed;
+            background-size: cover;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 2em;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+            color: #555;
+        }
+        input[type="text"], input[type="email"], input[type="tel"], textarea, select {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0 20px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 1em;
+        }
+        textarea {
+            resize: vertical;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .logo {
+            display: block;
+            margin: 0 auto 20px;
+            max-width: 210px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .id-proof-section {
+            display: flex;
+            gap: 175px;
+        }
+        .id-proof-section label {
+            margin-top: 0;
+        }
+        .id-proof-section select,
+        .id-proof-section input {
+            width: calc(140% - 0px); /* subtract margin */
+            padding: 12px;
+            margin: 8px 0 20px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 1em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="logo.svg" alt="Company Logo" class="logo">
+        <h1>Visitor Form</h1>
+        <form action="submit_visitor_form.php" method="post" id="VisitorForm">
+            <div class="form-group">
+                <label for="full_name">Full Name:</label>
+                <input type="text" id="full_name" name="full_name" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email Address:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="phone">Phone Number:</label>
+                <input type="tel" id="phone" name="phone" required>
+            </div>
+            <div class="form-group">
+                <label for="department">Department:</label>
+                <select id="department" name="department">
+                    <option value="">Select Department</option>
+                    <option value="Marketing and Sales">Marketing and Sales</option>
+                    <option value="Finance">Finance</option>
+                    <option value="Human Resources">Human Resources</option>
+                    <option value="IT">IT</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="contact_person">Contact Person:</label>
+                <select id="contact_person" name="contact_person" required>
+                    <option value="">Select Contact Person</option>
+                    <!-- Options will be dynamically added here -->
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="position">Purpose of Visit:</label>
+                <input type="text" id="position" name="position" required>
+            </div>
+            <div class="form-group">
+                <div class="id-proof-section">
+                    <div>
+                        <label for="id_proof">Visitor ID Proof:</label>
+                        <select id="id_proof" name="id_proof">
+                            <option value="">Select ID Proof</option>
+                            <option value="Adhar Card">Adhar Card</option>
+                            <option value="Pan Card">Pan Card</option>
+                            <option value="Voter ID">Voter ID</option>
+                            <option value="Passport">Passport</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="id_proof_number">ID Proof Number:</label>
+                        <input type="text" id="id_proof_number" name="id_proof_number" required>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="gender">Gender:</label>
+                <select id="gender" name="gender">
+                    <option value="">Select Gender</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+    <script>
+        // Contact persons data based on departments
+        const contactPersons = {
+            "Marketing and Sales": ["Gaurav", "Vedan"],
+            "Finance": ["Harinath", "Pranjul"],
+            "Human Resources": ["Kavya", "Mehak"],
+            "IT": ["Yoginder Singh", "Ravinder"]
+        };
+
+        // Function to populate contact persons based on selected department
+        function populateContactPersons() {
+            const departmentSelect = document.getElementById('department');
+            const contactPersonSelect = document.getElementById('contact_person');
+            const selectedDepartment = departmentSelect.value;
+
+            // Clear existing options
+            contactPersonSelect.innerHTML = '';
+
+            // Add default option
+            const defaultOption = document.createElement('option');
+            defaultOption.text = 'Select Contact Person';
+            defaultOption.value = '';
+            contactPersonSelect.add(defaultOption);
+
+            // Populate options based on selected department
+            if (selectedDepartment && contactPersons[selectedDepartment]) {
+                const persons = contactPersons[selectedDepartment];
+                persons.forEach(person => {
+                    const option = document.createElement('option');
+                    option.text = person;
+                    option.value = person.toLowerCase().replace(/\s+/g, '_'); // Generating value based on name
+                    contactPersonSelect.add(option);
+                });
+            }
+        }
+
+        // Event listener for department selection change
+        document.getElementById('department').addEventListener('change', populateContactPersons);
+
+        // Initial population of contact persons based on default selection
+        populateContactPersons();
+    </script>
+</body>
+</html>
